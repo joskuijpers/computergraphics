@@ -8,21 +8,21 @@ public:
 	std::list<Tree> children;
 };
 
-
 #include "Exercises.h"
 
-////////////////////////////// Exercise 2 
+
+#pragma mark - Exercise 2
+
 float TreeTraversal(const Tree& t, TreeVisitor& visitor, bool countOnlyEvenLevels)
 {
 	return visitor.visitTree(t, countOnlyEvenLevels);
 }
 
-///////////////////////////// Exercise 3
+#pragma mark - Exercise 3
 
 Complex ComplexOperation(Complex c1, Complex c2)
 {
-	return Complex(0, 0);
-	//    return (c1-c2) * (c1+c2);
+	return (c1-c2) * (c1+c2);
 }
 
 
@@ -47,15 +47,11 @@ bool equalFloats(float f1, float f2)
 	return fabs(f1 - f2) < EPSILON;
 }
 
-/////////////////////////////////
-///////////////////////////////// Main function
-/////////////////////////////////
+#pragma mark - Main function
 
 int main() 
 {
-	////////////// Test functions
-
-	////////////////////////// Exercise 1
+#pragma mark - Exercise 1
 	std::list<float> stats;
 	stats.push_back(-4.f);
 	stats.push_back(-2.f);
@@ -69,16 +65,11 @@ int main()
 	std::pair<float, float> statsAnswer = Statistics(stats); 
 
 	if (equalFloats(statsAnswer.first, 0.f) && equalFloats(statsAnswer.second, 2.0))
-	{
 		std::cout << "Exercise 1: Correct" << std::endl;
-	}
-	else 
-	{
+	else
 		std::cout << "Exercise 1: Incorrect" << std::endl;
-	}
-	///////////////////////////////////////////////////////////
 
-	////////////////////////// Exercise 2
+#pragma mark - Exercise 2
 	Tree root;
 	fillTree(root, 0);
 	TreeVisitor visitor;
@@ -86,31 +77,21 @@ int main()
 	float visitAnswer2 = visitor.visitTree(root, true);
 
 	if (equalFloats(visitAnswer1, 1132.f) && equalFloats(visitAnswer2, 984.f))
-	{
 		std::cout << "Exercise 2: Correct" << std::endl;
-	}
 	else
-	{
 		std::cout << "Exercise 2: Incorrect" << std::endl;
-	}
-	///////////////////////////////////////////////////////////
 
-	////////////////////////// Exercise 3
+#pragma mark - Exercise 3
 	Complex c1(1.f,  2.f);
 	Complex c2(5.f, -3.f);
 	Complex complexAnswer = ComplexOperation(c1, c2);
 
 	if (equalFloats(complexAnswer.real, -19.f) && equalFloats(complexAnswer.im, 34.f))
-	{
 		std::cout << "Exercise 3: Correct" << std::endl;
-	}
 	else
-	{
 		std::cout << "Exercise 3: Incorrect" << std::endl;
-	}
-	///////////////////////////////////////////////////////////
 
-	////////////////////////// Exercise 4
+#pragma mark - Exercise 4
 	std::list<float> heights;
 	heights.push_back(7);
 	heights.push_back(6);
@@ -126,16 +107,11 @@ int main()
 	float waterAnswer = WaterLevels(heights);
 
 	if (equalFloats(waterAnswer, 11.f))
-	{
 		std::cout << "Exercise 4: Correct" << std::endl;
-	}
 	else
-	{
 		std::cout << "Exercise 4: Incorrect" << std::endl;
-	}
-	///////////////////////////////////////////////////////////
 
-	////////////////////////// Exercise 4
+#pragma mark - Exercise 5
 	std::set<std::pair<location, location> > labyrinth;
 	labyrinth.insert(std::pair<location, location>(location(0, 0), location(1, 0)));
 	labyrinth.insert(std::pair<location, location>(location(0, 1), location(1, 1)));
@@ -148,15 +124,9 @@ int main()
 
 	int labAnswer = Labyrinth(labyrinth, 4);
 	if (labAnswer == 13)
-	{
 		std::cout << "Exercise 5: Correct" << std::endl;
-	}
 	else
-	{
 		std::cout << "Exercise 5: Incorrect" << std::endl;
-	}
-	///////////////////////////////////////////////////////////
-
 
 	std::cout << "All done!" << std::endl;
 
