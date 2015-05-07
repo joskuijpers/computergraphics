@@ -53,9 +53,21 @@ public:
 ////////////////// Exercise 3 ////////////////////////////////////
 class Complex {
 public:
-	Complex(float real, float imaginary){};
+    Complex(float real, float imaginary) : real(real), im(imaginary){};
 
 	float real, im;
+
+    Complex operator+(const Complex& c2) {
+        return Complex(real + c2.real, im + c2.im);
+    }
+
+    Complex operator-(const Complex& c2) {
+        return Complex(real - c2.real, im - c2.im);
+    }
+
+    Complex operator*(const Complex& c2) {
+        return Complex(real * c2.real - im * c2.im, real * c2.im + im * c2.real);
+    }
 };
 //////////////////////////////////////////////////////////////////
 
