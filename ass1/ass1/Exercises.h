@@ -7,7 +7,24 @@
 ////////////////// Exercise 1 ////////////////////////////////////
 std::pair<float, float> Statistics(const std::list<float>& values)
 {
-	return std::pair<float, float>(0.f, 0.f);
+    float avg = 0, stddev = 0, sum = 0;
+    int size = values.size();
+    
+    if (size == 0)
+        return std::pair<float, float>(avg, stddev);
+    
+    for (float v : values)
+        sum += v;
+    
+    avg = sum / size;
+    
+    for (float v: values)
+        stddev += powf(v - avg, 2);
+    
+    stddev /= size;
+    stddev = sqrtf(stddev);
+    
+    return std::pair<float, float>(avg, stddev);
 }
 //////////////////////////////////////////////////////////////////
 
