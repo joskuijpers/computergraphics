@@ -194,9 +194,6 @@ float WaterLevels(list<float> heights)
 			// calculate the contents of this 'lake'
 			// for every surface in this linepiece, calculate diff between height
 			// and height of the line.
-
-			float cur = sum;
-
 			for(int i = line.first; i <= line.second; ++i)
 				sum += top - vHeights[i];
 
