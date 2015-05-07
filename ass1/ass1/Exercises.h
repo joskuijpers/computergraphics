@@ -31,7 +31,22 @@ std::pair<float, float> Statistics(const std::list<float>& values)
 ////////////////// Exercise 2 ////////////////////////////////////
 class TreeVisitor {
 public:
-	float visitTree(const Tree& tree, bool countOnlyEvenLevels){ return 0.f; }
+	float visitTree(const Tree& tree, bool countOnlyEvenLevels) {
+        return visitLevel(tree, countOnlyEvenLevels, 0);
+    }
+
+    float visitLevel(const Tree& tree, bool countOnlyEvenLevels, int level) {
+        float sum = 0;
+
+        if (!countOnlyEvenLevels || level % 2 == 0) {
+            sum += tree.value;
+        }
+
+        for (Tree t : tree.children)
+            sum += visitLevel(t, countOnlyEvenLevels, level + 1);
+
+        return sum;
+    }
 };
 //////////////////////////////////////////////////////////////////
 
