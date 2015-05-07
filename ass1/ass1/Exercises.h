@@ -229,23 +229,135 @@ float WaterLevels(list<float> heights)
 
 #pragma mark - Exercise 5
 typedef std::pair<int, int> location;
+typedef set<pair<location, location>> walls_t;
 
-int Labyrinth(set<pair<location, location>> labyrinth, int size)
+typedef struct labyrinth_node_s
 {
+	location loc;
+	location parent;
+	labyrinth_node_s *children[4];
+	int numChildren;
+} labyrinth_node_t;
+
+
+bool isWall(walls_t walls, location from, location to)
+{
+	for(pair<location,location> wall : walls) {
+		if((wall.first == from && wall.second == to)
+		   || (wall.first == to && wall.second == from))
+			return true;
+	}
+	return false;
+}
+
+labyrinth_node_t *buildTree(walls_t walls, int size, list<location> parents, location current)
+{
+	// current node becomes a parent: copy parents, push current node
+	list<location> newParents = parents;
+	newParents.push_back(current);
+
+	labyrinth_node_t *node = new labyrinth_node_t;
+	node->loc = current;
+	node->numChildren = 0;
+	if(parents.size() > 0)
+		node->parent = parents.back();
+
+	//	find all neighbors where neightbor is any...
+	// for every neighbor, (4 directions)
+	for(int i = 0; i < 4; ++i) {
+		int x = current.first;
+		int y = current.second;
+
+		switch(i) {
+			case 0: ++x; break; // right
+			case 1: --x; break; // left
+			case 2: ++y; break; // down
+			case 3: --y; break; // up
+		};
+
+		// ...except...
+
+		// ...outside boundaries,...
+		if(x < 0 || x >= size || y < 0 || y >= size)
+			continue;
+
+		// ...wall boundaries, ...
+		if(isWall(walls, current, location(x,y)))
+			continue;
+
+		// ... or already in parent list.
+		bool inList = false;
+
+		for(location l : parents) {
+			if(l == location(x,y)) {
+				inList = true;
+				break;
+			}
+		}
+		if(inList)
+			continue;
+
+//		cout << "path from (" << current.first << "," << current.second << ") to (" << x << "," << y << ")" << endl;
+
+		// Node is an accessable path node, find subtree
+		labyrinth_node_t *child = buildTree(walls, size, newParents, location(x,y));
+
+		// Add subtree to children
+		node->children[node->numChildren++] = child;
+	}
+
+	return node;
+}
+
+int Labyrinth(walls_t labyrinth, int size)
+{
+	location start(0,0), finish(size-1,size-1);
+
 	// Build a tree. Every node is a square, every edge a path from
 	// a square to another square. Paths that are not possible are not made. (walls)
 
+	// Start building at 0,0
+	labyrinth_node_t *root = buildTree(labyrinth, size, list<location>(), start);
+
+	// Execute a simple algorithm (we assume the graphs are reasonably small).
+	// This is kind of bruteforce, but optimized.
+	// Do a DFS on the tree, keeping track of the shortest path.
+	// If the current path is going to be > the shortest, skip it
+	int shortestPath = INT_MAX;
+
+	// Stack for DFS (queue for BFS)
+	stack<pair<labyrinth_node_t *,int>> queue;
+	queue.push(pair<labyrinth_node_t *,int>(root,1));
+
+	while(!queue.empty()) {
+		pair<labyrinth_node_t *,int> queueItem = queue.top();
+		queue.pop();
+
+		labyrinth_node_t *node = queueItem.first;
+
+		if(node->loc == finish) {
+			// Update shortest path
+			if(queueItem.second < shortestPath)
+				shortestPath = queueItem.second;
+
+			// Do not process any children
+			continue;
+		} else if(queueItem.second >= shortestPath) // length of this path can't ever be smaller than shortest found path
+			continue;
+
+		// Process all children
+		for(int i = 0; i < node->numChildren; ++i)
+			queue.push(pair<labyrinth_node_t *,int>(node->children[i],queueItem.second+1));
+	}
 
 
-	// Execute Dijkstra
+	// TODO: memory cleanup :). It is a mess, really.
+	// This is the last exercise, and after execution the program is ended,
+	// cleaning up all memory. So practically it is not needed to clean it up.
+	// it is also annoying to do so I am skipping it.
+	// What I should do, is use a class with a destructor :)
 
-	return 0;
-}
-
-bool isWall(set<pair<location, location>> labyrinth, pair<location, location> path)
-{
-	//
-	return false;
+	return shortestPath;
 }
 
 #endif
