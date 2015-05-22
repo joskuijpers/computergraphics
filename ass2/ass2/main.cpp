@@ -25,17 +25,23 @@
 #include <stdio.h>
 #include <string.h>
 
-//START READING HERE!!!
-
+void glToggle(GLenum cap);
 
 //////Predefined global variables
 
 //Use the enum values to define different rendering modes
 //The mode is used by the function display and the mode is
 //chosen during execution with the keys 1-9
-enum DisplayModeType {TRIANGLE=1, FACE=2, CUBE=3, ARM=4, MESH=5,};
+enum DisplayModeType {
+	DISPLAY_MODE_TRIANGLE=1,
+	DISPLAY_MODE_FACE=2,
+	DISPLAY_MODE_CUBE=3,
+	DISPLAY_MODE_ARM=4,
+	DISPLAY_MODE_MESH=5,
+	DISPLAY_MODE_LAST=5
+};
 
-DisplayModeType DisplayMode = TRIANGLE;
+DisplayModeType DisplayMode = DISPLAY_MODE_TRIANGLE;
 
 unsigned int W_fen = 800;  // screen width
 unsigned int H_fen = 800;  // screen height
@@ -192,23 +198,23 @@ void display(void)
 	drawLight();
 
 	switch (DisplayMode) {
-		case TRIANGLE:
+		case DISPLAY_MODE_TRIANGLE:
 			drawCoordSystem();
 			drawTriangle();
 			break;
-		case FACE:
+		case DISPLAY_MODE_FACE:
 			drawCoordSystem();
 			drawUnitFace();
 			break;
-		case CUBE:
+		case DISPLAY_MODE_CUBE:
 			drawCoordSystem();
 			drawUnitCube();
 			break;
-		case ARM:
+		case DISPLAY_MODE_ARM:
 			drawCoordSystem();
 			drawArm();
 			break;
-		case MESH:
+		case DISPLAY_MODE_MESH:
 			drawCoordSystem();
 			drawMesh();
 			break;
@@ -234,25 +240,30 @@ void keyboard(unsigned char key, int x, int y)
 	printf("key %d pressed at %d,%d\n",key,x,y);
 	fflush(stdout);
 
-	if ((key>='1')&&(key<='9'))
-	{
-		DisplayMode= (DisplayModeType) (key-'0');
+	// key between 1 and 9
+	if (key >= '1' && key <= '9' && (key-'0' <= DISPLAY_MODE_LAST)) {
+		DisplayMode = (DisplayModeType) (key - '0');
 		return;
 	}
 
-	switch (key)
-	{
-		case 27:     // touche ESC
+	switch (key) {
+		case 27: // ESC: quit application
 			exit(0);
-		case 'L':
-			//turn lighting on
-			glEnable(GL_LIGHTING);
-			break;
-		case 'l':
-			//turn lighting off
-			glDisable(GL_LIGHTING);
+		case 'l': // toggle lighting
+			glToggle(GL_LIGHTING);
 			break;
 	}
+}
+
+/**
+ * Simple function for toggling instead of enable/disable
+ */
+void glToggle(GLenum cap)
+{
+	if(glIsEnabled(cap))
+		glDisable(cap);
+	else
+		glEnable(cap);
 }
 
 #pragma mark - End of changeable part
