@@ -90,6 +90,8 @@ void drawCoordSystem(float length = 1.f)
 
 #pragma mark - Several drawing functions for you to work on
 
+GLfloat g_triangleAnimate = 0.0;
+
 /**
  * Draw a simple trangle
  */
@@ -104,13 +106,48 @@ void drawTriangle()
 	//5) go to the function animate and increment this variable
 	//by a small value - observe the animation.
 
-	glColor3f(1,1,1);
+	/*
+	// Red triangle
+	glColor3f(1,0,0);
 	glNormal3f(0,0,1);
 	glBegin(GL_TRIANGLES);
 	{
+		glVertex3f(g_triangleAnimate,0,0);
+		glVertex3f(1.1,0,0);
+		glVertex3f(0,1.1,0);
+	}
+	glEnd();
+
+	// Blue trangle
+	glColor3f(0,0,1);
+	glNormal3f(1,0,0);
+	glBegin(GL_TRIANGLES);
+	{
+		glVertex3f(g_triangleAnimate,0,1.1);
 		glVertex3f(0,0,0);
-		glVertex3f(1,0,0);
-		glVertex3f(1,1,0);
+		glVertex3f(0,1.1,0);
+	}
+	glEnd();
+
+
+	*/
+
+	// Same result, due to OGL being a state machine:
+	glBegin(GL_TRIANGLES);
+	{
+		// Red triangle
+		glColor3f(1,0,0);
+		glNormal3f(1,0,0);
+		glVertex3f(g_triangleAnimate,0,0);
+		glVertex3f(1.1,0,0);
+		glVertex3f(0,1.1,0);
+
+		// Blue triangle
+		glColor3f(0,0,1);
+		glNormal3f(1,0,0);
+		glVertex3f(g_triangleAnimate,0,1.1);
+		glVertex3f(0,0,0);
+		glVertex3f(0,1.1,0);
 	}
 	glEnd();
 }
@@ -229,7 +266,7 @@ void display(void)
  */
 void animate(void)
 {
-
+	g_triangleAnimate += 0.001f;
 }
 
 /**
