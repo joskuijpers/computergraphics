@@ -3,8 +3,8 @@
 // François Faure, iMAGIS-GRAVIR, May 2001
 //========================================================
 
-#ifndef ANIMAL_command_line_parser________
-#define ANIMAL_command_line_parser________
+#ifndef ANIMAL_COMMAND_LINE_PARSER_H
+#define ANIMAL_COMMAND_LINE_PARSER_H
 
 #include <iostream>
 #include <stdlib.h>
@@ -362,7 +362,5 @@ inline ArgumentParser parse( const std::string& helpstr="", char hs='h', const s
 
 } // close namespace animal
 
-
-
-#endif
+#endif // ANIMAL_COMMAND_LINE_PARSER_H
 

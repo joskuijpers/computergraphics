@@ -302,7 +302,7 @@ void centerAndScaleToUnit (std::vector<float> & vertices)
 			maxD = m;
 	}
 
-	float center[] = {x,y,z};
+//	float center[] = {x,y,z};
 	for (unsigned int i = 0; i < vertices.size (); i+=3)
 	{
 		vertices[i] = (vertices[i] - x) / maxD;
