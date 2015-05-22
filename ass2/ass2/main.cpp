@@ -158,6 +158,17 @@ void drawUnitFace()
 	//1) draw a unit quad in the x,y plane oriented along the z axis
 	//2) make sure the orientation of the vertices is positive (counterclock wise)
 	//3) What happens if the order is inversed?
+	// - JOS: you see the backside, which is drawn line-only
+
+	glBegin(GL_QUADS);
+	{
+		glNormal3f(1,0,0);
+		glVertex3f(0, 0, 0);
+		glVertex3f(0, 1, 0);
+		glVertex3f(0, 1, 1);
+		glVertex3f(0, 0, 1);
+	}
+	glEnd();
 }
 
 void drawUnitCube()
@@ -169,6 +180,59 @@ void drawUnitCube()
 	//the top of a stack.
 	//glPopMatrix pops the top matrix on the stack
 
+	// JOS: it is very annoying to get the triangles facing outside due to to the
+	// backside being egded, and front being filled. I want the cube to be filled.
+	// Efficiency: 0.0
+
+	// To put it inside the coord axes
+	glTranslatef(1, 0, 0);
+
+	// Front
+	glColor3f(1, 0, 0);
+	drawUnitFace();
+
+	// Right
+	glColor3f(0, 1, 0);
+	glPushMatrix();
+		glTranslatef(-1, 0, 0);
+		glRotatef(90.f, 0, 1, 0);
+		drawUnitFace();
+	glPopMatrix();
+
+	// Back
+	glColor3f(0, 0, 1);
+	glPushMatrix();
+		glTranslatef(-1, 0, 1);
+		glRotatef(180.f, 0, 1, 0);
+		drawUnitFace();
+	glPopMatrix();
+
+	// Left
+	glColor3f(1, 1, 0);
+	glPushMatrix();
+		glTranslatef(0, 0, 1);
+		glRotatef(270.f, 0, 1, 0);
+		drawUnitFace();
+	glPopMatrix();
+
+	// Top
+	glColor3f(1, 0, 1);
+	glPushMatrix();
+		glTranslatef(-1, 0, 0);
+		glRotatef(-90.f, 0, 0, 1);
+		drawUnitFace();
+	glPopMatrix();
+
+	// Bottom
+	glColor3f(0, 1, 1);
+	glPushMatrix();
+		glTranslatef(0, 1, 0);
+		glRotatef(90.f, 0, 0, 1);
+		drawUnitFace();
+	glPopMatrix();
+
+	// Better way: use a vertex list... don't use this unit face function.
+	// Also, do not draw backside differently than the front side
 }
 
 void drawArm()
