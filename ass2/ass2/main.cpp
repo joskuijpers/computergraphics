@@ -140,14 +140,20 @@ void drawTriangle()
 	{
 		// Red triangle
 		glColor3f(1,0,0);
-		glNormal3f(1,0,0);
+		glNormal3f(0,0,1);
 		glVertex3f(g_triangleAnimate,0,0);
 		glVertex3f(1.1,0,0);
 		glVertex3f(0,1.1,0);
 
+//		U = p2 - p1 = [-g_triang, 0, -1.1]
+//		V = p3 - p1 = [-g_trang, 1.1, -1.1]
+//		Nx = UyVz - UzVy = 1.1*1.1
+//		Ny = UzVx - UxVz = 0
+//		Nz = UxVy - UyVx = g*-1.1
+
 		// Blue triangle
 		glColor3f(0,0,1);
-		glNormal3f(1,0,0);
+		glNormal3f(1.1f*1.1f,0,-1.1f*g_triangleAnimate);
 		glVertex3f(g_triangleAnimate,0,1.1);
 		glVertex3f(0,0,0);
 		glVertex3f(0,1.1,0);
@@ -348,17 +354,7 @@ void drawArm()
 
 void drawLight()
 {
-	//1) use glutSolidSphere to draw a sphere at the light's position LightPos
-	//use glTranslatef to move it to the right location
-	//to make the light source bright, follow the drawCoordSystem function
-	//to deactivate the lighting temporarily and draw it in yellow
-
 	//2) make the light position controllable via the keyboard function
-
-	//3) add normal information to all your faces of the previous functions
-	//and observe the shading after pressing 'L' to activate the lighting
-	//you can use 'l' to turn it off again
-
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	glDisable(GL_LIGHTING);
 
