@@ -245,7 +245,7 @@ void betterDrawUnitCube()
 //	glLoadIdentity();
 
 	glPushMatrix();
-	glTranslatef(0.5, 0.5, 0.5);
+	glTranslatef(0.5, 0, 0.5); // keep y centered on axis for rotations
 
 	glBegin(GL_QUADS);
 
