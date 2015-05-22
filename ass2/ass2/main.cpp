@@ -50,16 +50,20 @@ int myVariableThatServesNoPurpose;
 
 ////////// Draw Functions
 
-//function to draw coordinate axes with a certain length (1 as a default)
-void drawCoordSystem(float length=1)
+/**
+ * Draw coordinate axes with a certain length (1 as a default)
+ *
+ * @param length Length of the axis
+ */
+void drawCoordSystem(float length = 1.f)
 {
-	//draw simply colored axes
-
-	//remember all states of the GPU
+	// remember all states of the GPU
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
-	//deactivate the lighting state
+
+	// deactivate the lighting state, to make the axis full-bright
 	glDisable(GL_LIGHTING);
-	//draw axes
+
+	// draw axes
 	glBegin(GL_LINES);
 	glColor3f(1,0,0);
 	glVertex3f(0,0,0);
@@ -74,14 +78,15 @@ void drawCoordSystem(float length=1)
 	glVertex3f(0,0,length);
 	glEnd();
 
-	//reset to previous state
+	// reset to previous state
 	glPopAttrib();
 }
 
-/**
- * Several drawing functions for you to work on
- */
+#pragma mark - Several drawing functions for you to work on
 
+/**
+ * Draw a simple trangle
+ */
 void drawTriangle()
 {
 	//a simple example of a drawing function for a triangle
@@ -96,9 +101,11 @@ void drawTriangle()
 	glColor3f(1,1,1);
 	glNormal3f(0,0,1);
 	glBegin(GL_TRIANGLES);
-	glVertex3f(0,0,0);
-	glVertex3f(1,0,0);
-	glVertex3f(1,1,0);
+	{
+		glVertex3f(0,0,0);
+		glVertex3f(1,0,0);
+		glVertex3f(1,1,0);
+	}
 	glEnd();
 }
 
@@ -149,7 +156,6 @@ void drawLight()
 	//3) add normal information to all your faces of the previous functions
 	//and observe the shading after pressing 'L' to activate the lighting
 	//you can use 'l' to turn it off again
-
 }
 
 
@@ -173,45 +179,56 @@ void drawMesh()
 	// What do you observe with respect to the lighting?
 
 	//4) try loading your own model (export it from Blender as a Wavefront obj) and replace the provided mesh file.
-
 }
 
-
-void display( )
+/**
+ * The display routine. Draws depending on the display mode.
+ */
+void display(void)
 {
-	//set the light to the right position
+	// Set the light to the right position
 	glLightfv(GL_LIGHT0,GL_POSITION,LightPos);
+
 	drawLight();
 
-	switch( DisplayMode )
-	{
+	switch (DisplayMode) {
 		case TRIANGLE:
-			drawMesh();
 			drawCoordSystem();
 			drawTriangle();
 			break;
 		case FACE:
+			drawCoordSystem();
 			drawUnitFace();
 			break;
-			//...
-
+		case CUBE:
+			drawCoordSystem();
+			drawUnitCube();
+			break;
+		case ARM:
+			drawCoordSystem();
+			drawArm();
+			break;
+		case MESH:
+			drawCoordSystem();
+			drawMesh();
+			break;
 		default:
-
 			break;
 	}
 }
 
 
 /**
- * Animation
+ * Animation routine.
  */
-void animate( )
+void animate(void)
 {
 
 }
 
-
-//take keyboard input into account
+/**
+ * Keyboard input routine
+ */
 void keyboard(unsigned char key, int x, int y)
 {
 	printf("key %d pressed at %d,%d\n",key,x,y);
@@ -243,10 +260,11 @@ void keyboard(unsigned char key, int x, int y)
 void displayInternal(void);
 void reshape(int w, int h);
 bool loadMesh(const char * filename);
+
 void init()
 {
-	glDisable( GL_LIGHTING );
-	glEnable( GL_LIGHT0 );
+	glDisable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
 	glEnable(GL_COLOR_MATERIAL);
 	glEnable(GL_NORMALIZE);
 
@@ -255,7 +273,7 @@ void init()
  //   glMateriali(GL_FRONT_AND_BACK,GL_SHININESS,10);
 
 	// Enable Depth test
-	glEnable( GL_DEPTH_TEST );
+	glEnable(GL_DEPTH_TEST);
 
 	//glEnable(GL_CULL_FACE);
 	//glCullFace(GL_BACK);
@@ -264,13 +282,14 @@ void init()
 	//draw backfacing polygons as outlined
 	glPolygonMode(GL_BACK,GL_LINE);
 	glShadeModel(GL_SMOOTH);
+
+	// Load a mesh
 	loadMesh("David.obj");
 }
 
+#pragma mark - Mesh loading
 
-//load mesh
-//this code is NOT how you should load a mesh... it is a bit hacky...
-void centerAndScaleToUnit (std::vector<float> & vertices)
+void centerAndScaleToUnit(std::vector<float> & vertices)
 {
 	if (vertices.size() % 3 != 0) {
 		cout << "ERROR while loading!!!\n";
@@ -311,38 +330,42 @@ void centerAndScaleToUnit (std::vector<float> & vertices)
 	}
 }
 
+/**
+ * Load a mesh
+ * 
+ * This code is NOT how you should load a mesh... it is a bit hacky...
+ */
 bool loadMesh(const char *filename)
 {
 	const unsigned int LINE_LEN = 256;
 	char s[LINE_LEN];
 	FILE *in;
+	float x, y, z;
+	std::vector<int> vhandles;
 
 #ifdef _WIN32
 	errno_t error=fopen_s(&in, filename,"r");
 	if (error!=0)
 #else
-		in = fopen(filename,"r");
+	in = fopen(filename,"r");
 	if (!(in))
 #endif
 		return false;
 
-	//temp stuff
-	float x, y, z;
-	std::vector<int> vhandles;
-
+	// Read every line in the object file
 	while(in && !feof(in) && fgets(s, LINE_LEN, in))
 	{
+		// comment
+		if (strncmp(s, "#", 1) == 0) {
+			// skip
 		// vertex
-		if (strncmp(s, "v ", 2) == 0)
-		{
+		} else if (strncmp(s, "v ", 2) == 0) {
 			if (sscanf(s, "v %f %f %f", &x, &y, &z))
 				MeshVertices.push_back(x);
 			MeshVertices.push_back(y);
 			MeshVertices.push_back(z);
-		}
 		// face
-		else if (strncmp(s, "f ", 2) == 0)
-		{
+		} else if (strncmp(s, "f ", 2) == 0) {
 			int component(0), nV(0);
 			bool endOfVertex(false);
 			char *p0, *p1(s+2); //place behind the "f "
