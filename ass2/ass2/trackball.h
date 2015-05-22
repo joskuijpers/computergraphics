@@ -5,9 +5,22 @@ No worries... you do not need to understand or modify this file!
 
 BTW all comments here are French. :)
 */
-#ifndef TRAQUEBOULE
-#define TRAQUEBOULE
-#include <GL/glut.h>
+#ifndef TRAQUEBOULE_H
+#define TRAQUEBOULE_H
+
+#if defined(__APPLE__) // OSX
+# include "TargetConditionals.h"
+# if TARGET_OS_MAC
+#  include <OpenGL/gl.h>
+#  include <OpenGL/glu.h>
+#  include <GLUT/glut.h>
+# else
+#  error Unsupported platform
+# endif
+#else // any UNIX
+# include <GL/glut.h>
+#endif
+
 #include <math.h>
 #include "matrix.h"
 
@@ -193,4 +206,5 @@ void tbProject( const GLdouble *m, const GLdouble* p, GLdouble* q )
     project( tb_inverse, pp, q );
     //cout<<"projRep: "<<q[0]<<", "<<q[1]<<", "<<q[2]<<", "<<q[3]<<endl;
 }
-#endif
+
+#endif // TRACKBALL_H

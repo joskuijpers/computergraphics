@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		80FF00961B0F4322003EEC99 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 80FF00951B0F4322003EEC99 /* main.cpp */; };
+		80FF00A41B0F4890003EEC99 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80FF00A21B0F4890003EEC99 /* GLUT.framework */; };
+		80FF00A51B0F4890003EEC99 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80FF00A31B0F4890003EEC99 /* OpenGL.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -30,6 +32,8 @@
 		80FF009E1B0F4624003EEC99 /* matrix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = matrix.h; sourceTree = "<group>"; };
 		80FF009F1B0F4624003EEC99 /* test.pro */ = {isa = PBXFileReference; lastKnownFileType = text; path = test.pro; sourceTree = "<group>"; };
 		80FF00A01B0F4624003EEC99 /* trackball.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = trackball.h; sourceTree = "<group>"; };
+		80FF00A21B0F4890003EEC99 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
+		80FF00A31B0F4890003EEC99 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,6 +41,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				80FF00A41B0F4890003EEC99 /* GLUT.framework in Frameworks */,
+				80FF00A51B0F4890003EEC99 /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -48,6 +54,7 @@
 			children = (
 				80FF00941B0F4322003EEC99 /* ass2 */,
 				80FF00931B0F4322003EEC99 /* Products */,
+				80FF00A61B0F4E19003EEC99 /* Libraries */,
 			);
 			sourceTree = "<group>";
 		};
@@ -78,6 +85,15 @@
 				80FF009F1B0F4624003EEC99 /* test.pro */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		80FF00A61B0F4E19003EEC99 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				80FF00A21B0F4890003EEC99 /* GLUT.framework */,
+				80FF00A31B0F4890003EEC99 /* OpenGL.framework */,
+			);
+			name = Libraries;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
