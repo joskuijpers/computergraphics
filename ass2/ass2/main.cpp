@@ -354,7 +354,6 @@ void drawArm()
 
 void drawLight()
 {
-	//2) make the light position controllable via the keyboard function
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	glDisable(GL_LIGHTING);
 
@@ -473,6 +472,24 @@ void keyboard(unsigned char key, int x, int y)
 			break;
 		case 'E':
 			g_armHandAngle -= .5f;
+			break;
+		case 'f': // light left (-x)
+			LightPos[0] -= .1;
+			break;
+		case 'g': // light forward -z
+			LightPos[2] -= .1;
+			break;
+		case 'h': // light right +x
+			LightPos[0] += .1;
+			break;
+		case 't': // light back +z
+			LightPos[2] += .1;
+			break;
+		case 'n': // light down -y
+			LightPos[1] -= .1;
+			break;
+		case 'm': // light up +y
+			LightPos[1] += .1;
 			break;
 	}
 }
