@@ -91,6 +91,9 @@ void drawCoordSystem(float length = 1.f)
 #pragma mark - Several drawing functions for you to work on
 
 GLfloat g_triangleAnimate = 0.0;
+GLfloat g_armUpperAngle = 20.f;
+GLfloat g_armForeAngle = 30.f;
+GLfloat g_armHandAngle = 15.f;
 
 /**
  * Draw a simple trangle
@@ -152,7 +155,6 @@ void drawTriangle()
 	glEnd();
 }
 
-
 void drawUnitFace()
 {
 	//1) draw a unit quad in the x,y plane oriented along the z axis
@@ -183,9 +185,6 @@ void drawUnitCube()
 	// JOS: it is very annoying to get the triangles facing outside due to to the
 	// backside being egded, and front being filled. I want the cube to be filled.
 	// Efficiency: 0.0
-
-	// To put it inside the coord axes
-	glTranslatef(1, 0, 0);
 
 	// Front
 	glColor3f(1, 0, 0);
@@ -231,8 +230,58 @@ void drawUnitCube()
 		drawUnitFace();
 	glPopMatrix();
 
+	glPopMatrix();
+
 	// Better way: use a vertex list... don't use this unit face function.
 	// Also, do not draw backside differently than the front side
+}
+
+/**
+ * Better and faster version
+ */
+
+void betterDrawUnitCube()
+{
+//	glLoadIdentity();
+
+	glPushMatrix();
+	glTranslatef(0.5, 0.5, 0.5);
+
+	glBegin(GL_QUADS);
+
+	glVertex3f( .5f, .5f,-.5f);
+	glVertex3f(-.5f, .5f,-.5f);
+	glVertex3f(-.5f, .5f, .5f);
+	glVertex3f( .5f, .5f, .5f);
+
+	glVertex3f( .5f,-.5f, .5f);
+	glVertex3f(-.5f,-.5f, .5f);
+	glVertex3f(-.5f,-.5f,-.5f);
+	glVertex3f( .5f,-.5f,-.5f);
+
+	glVertex3f( .5f, .5f, .5f);
+	glVertex3f(-.5f, .5f, .5f);
+	glVertex3f(-.5f,-.5f, .5f);
+	glVertex3f( .5f,-.5f, .5f);
+
+	glVertex3f( .5f,-.5f,-.5f);
+	glVertex3f(-.5f,-.5f,-.5f);
+	glVertex3f(-.5f, .5f,-.5f);
+	glVertex3f( .5f, .5f,-.5f);
+
+	glVertex3f(-.5f, .5f, .5f);
+	glVertex3f(-.5f, .5f,-.5f);
+	glVertex3f(-.5f,-.5f,-.5f);
+	glVertex3f(-.5f,-.5f, .5f);
+
+	glVertex3f( .5f, .5f,-.5f);
+	glVertex3f( .5f, .5f, .5f);
+	glVertex3f( .5f,-.5f, .5f);
+	glVertex3f( .5f,-.5f,-.5f);
+
+	glEnd();
+
+	glPopMatrix();
 }
 
 void drawArm()
@@ -249,6 +298,48 @@ void drawArm()
 
 	//3 optional) make an animated snake out of these boxes
 	//(an arm with 10 joints that moves using the animate function)
+
+	GLfloat armWidth = 0.2f;
+	GLfloat upperLength = 0.8f;
+	GLfloat foreLength = upperLength * 0.82f;
+	GLfloat handLength = foreLength * 0.76;
+
+	{ // Upperarm
+		glRotatef(g_armUpperAngle, 0, 0, 1);
+
+		glPushMatrix();
+			glScalef(upperLength, armWidth, armWidth);
+
+			glColor3f(1, 0, 0);
+			betterDrawUnitCube();
+		glPopMatrix();
+	}
+
+	// Forearm
+	{
+		glTranslatef(upperLength, 0, 0); // translate to end of upper
+		glRotatef(g_armForeAngle, 0, 0, 1);
+
+		glPushMatrix();
+			glScalef(foreLength, armWidth, armWidth);
+
+			glColor3f(0, 1, 0);
+			betterDrawUnitCube();
+		glPopMatrix();
+	}
+
+	// Hand
+	{
+		glTranslatef(foreLength, 0, 0); // translate to end of upper
+		glRotatef(g_armHandAngle, 0, 0, 1);
+
+		glPushMatrix();
+			glScalef(handLength, armWidth, armWidth);
+
+			glColor3f(0, 0, 1);
+			betterDrawUnitCube();
+		glPopMatrix();
+	}
 }
 
 void drawLight()
@@ -352,6 +443,24 @@ void keyboard(unsigned char key, int x, int y)
 			exit(0);
 		case 'l': // toggle lighting
 			glToggle(GL_LIGHTING);
+			break;
+		case 'q':
+			g_armUpperAngle += .5f;
+			break;
+		case 'Q':
+			g_armUpperAngle -= .5f;
+			break;
+		case 'w':
+			g_armForeAngle += .5f;
+			break;
+		case 'W':
+			g_armForeAngle -= .5f;
+			break;
+		case 'e':
+			g_armHandAngle += .5f;
+			break;
+		case 'E':
+			g_armHandAngle -= .5f;
 			break;
 	}
 }
