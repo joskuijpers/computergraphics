@@ -242,43 +242,47 @@ void drawUnitCube()
 
 void betterDrawUnitCube()
 {
-//	glLoadIdentity();
-
 	glPushMatrix();
 	glTranslatef(0.5, 0, 0.5); // keep y centered on axis for rotations
 
 	glBegin(GL_QUADS);
+	{
+		glNormal3f(0, 1, 0);
+		glVertex3f( .5f, .5f,-.5f);
+		glVertex3f(-.5f, .5f,-.5f);
+		glVertex3f(-.5f, .5f, .5f);
+		glVertex3f( .5f, .5f, .5f);
 
-	glVertex3f( .5f, .5f,-.5f);
-	glVertex3f(-.5f, .5f,-.5f);
-	glVertex3f(-.5f, .5f, .5f);
-	glVertex3f( .5f, .5f, .5f);
+		glNormal3f(0, 1, 0);
+		glVertex3f( .5f,-.5f, .5f);
+		glVertex3f(-.5f,-.5f, .5f);
+		glVertex3f(-.5f,-.5f,-.5f);
+		glVertex3f( .5f,-.5f,-.5f);
 
-	glVertex3f( .5f,-.5f, .5f);
-	glVertex3f(-.5f,-.5f, .5f);
-	glVertex3f(-.5f,-.5f,-.5f);
-	glVertex3f( .5f,-.5f,-.5f);
+		glNormal3f(0, 0, 1);
+		glVertex3f( .5f, .5f, .5f);
+		glVertex3f(-.5f, .5f, .5f);
+		glVertex3f(-.5f,-.5f, .5f);
+		glVertex3f( .5f,-.5f, .5f);
 
-	glVertex3f( .5f, .5f, .5f);
-	glVertex3f(-.5f, .5f, .5f);
-	glVertex3f(-.5f,-.5f, .5f);
-	glVertex3f( .5f,-.5f, .5f);
+		glNormal3f(0, 0, 1);
+		glVertex3f( .5f,-.5f,-.5f);
+		glVertex3f(-.5f,-.5f,-.5f);
+		glVertex3f(-.5f, .5f,-.5f);
+		glVertex3f( .5f, .5f,-.5f);
 
-	glVertex3f( .5f,-.5f,-.5f);
-	glVertex3f(-.5f,-.5f,-.5f);
-	glVertex3f(-.5f, .5f,-.5f);
-	glVertex3f( .5f, .5f,-.5f);
+		glNormal3f(1, 0, 0);
+		glVertex3f(-.5f, .5f, .5f);
+		glVertex3f(-.5f, .5f,-.5f);
+		glVertex3f(-.5f,-.5f,-.5f);
+		glVertex3f(-.5f,-.5f, .5f);
 
-	glVertex3f(-.5f, .5f, .5f);
-	glVertex3f(-.5f, .5f,-.5f);
-	glVertex3f(-.5f,-.5f,-.5f);
-	glVertex3f(-.5f,-.5f, .5f);
-
-	glVertex3f( .5f, .5f,-.5f);
-	glVertex3f( .5f, .5f, .5f);
-	glVertex3f( .5f,-.5f, .5f);
-	glVertex3f( .5f,-.5f,-.5f);
-
+		glNormal3f(1, 0, 0);
+		glVertex3f( .5f, .5f,-.5f);
+		glVertex3f( .5f, .5f, .5f);
+		glVertex3f( .5f,-.5f, .5f);
+		glVertex3f( .5f,-.5f,-.5f);
+	}
 	glEnd();
 
 	glPopMatrix();
@@ -354,6 +358,18 @@ void drawLight()
 	//3) add normal information to all your faces of the previous functions
 	//and observe the shading after pressing 'L' to activate the lighting
 	//you can use 'l' to turn it off again
+
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
+	glDisable(GL_LIGHTING);
+
+	glPushMatrix();
+		glTranslatef(LightPos[0], LightPos[1], LightPos[2]);
+
+		glColor3f(1, 1, 0);
+		glutSolidSphere(.1f, 15, 10);
+	glPopMatrix();
+
+	glPopAttrib();
 }
 
 
@@ -675,9 +691,6 @@ bool loadMesh(const char *filename)
 	return true;
 }
 
-
-
-
 /**
  * Programme principal
  */
@@ -686,14 +699,14 @@ int main(int argc, char** argv)
 	glutInit(&argc, argv);
 
 	// couches du framebuffer utilisees par l'application
-	glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH );
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 
 	// position et taille de la fenetre
 	glutInitWindowPosition(200, 100);
 	glutInitWindowSize(W_fen,H_fen);
 	glutCreateWindow(argv[0]);
 
-	init( );
+	init();
 
 	// Initialize viewpoint
 	glMatrixMode(GL_MODELVIEW);
@@ -701,8 +714,6 @@ int main(int argc, char** argv)
 	glTranslatef(0,0,-4);
 	tbInitTransform();
 	tbHelp();
-
-
 
 	// cablage des callback
 	glutReshapeFunc(reshape);
@@ -728,7 +739,6 @@ void displayInternal(void)
 	// Effacer tout
 	glClearColor (0.0, 0.0, 0.0, 0.0);
 	glClear( GL_COLOR_BUFFER_BIT  | GL_DEPTH_BUFFER_BIT); // la couleur et le z
-
 
 	glLoadIdentity();  // repere camera
 
